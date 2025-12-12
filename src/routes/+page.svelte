@@ -1,17 +1,20 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
+  import { onMount, onDestroy } from 'svelte';
   import { initUser, isLoading } from '$lib/stores/user';
   import { loadEntry, formatDate, currentEntry } from '$lib/stores/entries';
   import { loadCustomSymptoms } from '$lib/stores/symptoms';
   import { loadFoodHistory } from '$lib/stores/entries';
+  import { startReminderChecker, stopReminderChecker, reminderSettings } from '$lib/stores/reminders';
   import DayPicker from '$lib/components/DayPicker.svelte';
   import SymptomGrid from '$lib/components/SymptomGrid.svelte';
   import SymptomList from '$lib/components/SymptomList.svelte';
   import FoodInput from '$lib/components/FoodInput.svelte';
   import FoodList from '$lib/components/FoodList.svelte';
   import AddSymptomModal from '$lib/components/AddSymptomModal.svelte';
+  import ReminderSettings from '$lib/components/ReminderSettings.svelte';
 
   let showAddSymptomModal = $state(false);
+  let showReminderSettings = $state(false);
 
   onMount(async () => {
     await initUser();
@@ -20,6 +23,15 @@
       loadCustomSymptoms(),
       loadFoodHistory(),
     ]);
+
+    // Start reminder checker if enabled
+    if ($reminderSettings.enabled) {
+      startReminderChecker();
+    }
+  });
+
+  onDestroy(() => {
+    stopReminderChecker();
   });
 </script>
 
@@ -33,12 +45,24 @@
   <header class="bg-gradient-to-r from-sky-400 via-purple-400 to-pink-400 text-white p-4 shadow-lg">
     <div class="max-w-lg mx-auto flex items-center justify-between">
       <h1 class="text-xl font-bold">Food Diary</h1>
-      <a href="/history" class="text-white/70 hover:text-white transition-colors" aria-label="View history">
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-            d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-        </svg>
-      </a>
+      <div class="flex items-center gap-2">
+        <button
+          onclick={() => showReminderSettings = true}
+          class="p-1 text-white/70 hover:text-white transition-colors"
+          aria-label="Reminder settings"
+        >
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+          </svg>
+        </button>
+        <a href="/history" class="p-1 text-white/70 hover:text-white transition-colors" aria-label="View history">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+          </svg>
+        </a>
+      </div>
     </div>
   </header>
 
@@ -74,6 +98,11 @@
 <AddSymptomModal
   isOpen={showAddSymptomModal}
   onClose={() => showAddSymptomModal = false}
+/>
+
+<ReminderSettings
+  isOpen={showReminderSettings}
+  onClose={() => showReminderSettings = false}
 />
 
 <!-- Bottom Navigation -->

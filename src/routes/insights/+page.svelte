@@ -52,7 +52,7 @@
   <title>Insights - Food Diary</title>
 </svelte:head>
 
-<div class="min-h-screen bg-gray-50">
+<div class="min-h-screen bg-[#0f0f0f] pb-20">
   <!-- Header -->
   <header class="bg-gradient-to-r from-sky-400 via-purple-400 to-pink-400 text-white p-4 shadow-lg">
     <div class="max-w-lg mx-auto flex items-center gap-4">
@@ -69,41 +69,41 @@
   <main class="max-w-lg mx-auto p-4 space-y-6">
     {#if $isLoading || loadingEntries}
       <div class="flex items-center justify-center py-12">
-        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600"></div>
+        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-500"></div>
       </div>
     {:else if entries.length === 0}
-      <div class="text-center py-12 text-gray-400">
+      <div class="text-center py-12 text-gray-500">
         <p class="text-4xl mb-2">📊</p>
         <p>No data yet.</p>
         <p class="text-sm">Start logging food and symptoms to see insights!</p>
-        <a href="/" class="inline-block mt-4 text-purple-600 font-medium hover:underline">
+        <a href="/" class="inline-block mt-4 text-purple-400 font-medium hover:underline">
           Go to Log
         </a>
       </div>
     {:else}
       <!-- Summary Stats -->
       <div class="grid grid-cols-2 gap-3">
-        <div class="bg-white rounded-xl p-4 shadow-sm text-center">
-          <div class="text-2xl font-bold text-purple-600">{stats.totalDays}</div>
+        <div class="bg-[#1a1a1a] rounded-xl p-4 text-center">
+          <div class="text-2xl font-bold text-purple-400">{stats.totalDays}</div>
           <div class="text-xs text-gray-500">Days Logged</div>
         </div>
-        <div class="bg-white rounded-xl p-4 shadow-sm text-center">
-          <div class="text-2xl font-bold text-pink-500">{stats.symptomRate}%</div>
+        <div class="bg-[#1a1a1a] rounded-xl p-4 text-center">
+          <div class="text-2xl font-bold text-pink-400">{stats.symptomRate}%</div>
           <div class="text-xs text-gray-500">Days with Symptoms</div>
         </div>
-        <div class="bg-white rounded-xl p-4 shadow-sm text-center">
-          <div class="text-2xl font-bold text-sky-500">{stats.totalFoods}</div>
+        <div class="bg-[#1a1a1a] rounded-xl p-4 text-center">
+          <div class="text-2xl font-bold text-sky-400">{stats.totalFoods}</div>
           <div class="text-xs text-gray-500">Foods Logged</div>
         </div>
-        <div class="bg-white rounded-xl p-4 shadow-sm text-center">
-          <div class="text-2xl font-bold text-orange-500">{stats.totalSymptoms}</div>
+        <div class="bg-[#1a1a1a] rounded-xl p-4 text-center">
+          <div class="text-2xl font-bold text-orange-400">{stats.totalSymptoms}</div>
           <div class="text-xs text-gray-500">Symptoms Logged</div>
         </div>
       </div>
 
       <!-- Lag Window Selector -->
-      <div class="bg-white rounded-xl p-4 shadow-sm">
-        <label class="text-sm font-medium text-gray-600 block mb-2">
+      <div class="bg-[#1a1a1a] rounded-xl p-4">
+        <label class="text-sm font-medium text-gray-400 block mb-2">
           Time window for correlations
         </label>
         <div class="flex gap-2">
@@ -113,13 +113,13 @@
               class="flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-colors
                      {lagHours === option.value
                        ? 'bg-purple-600 text-white'
-                       : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}"
+                       : 'bg-[#2a2a2a] text-gray-400 hover:bg-[#3a3a3a]'}"
             >
               {option.label}
             </button>
           {/each}
         </div>
-        <p class="text-xs text-gray-400 mt-2">
+        <p class="text-xs text-gray-500 mt-2">
           Look for foods eaten within this time before symptoms appeared
         </p>
       </div>
@@ -129,16 +129,16 @@
 
       <!-- Safe Foods -->
       {#if safeFoods.length > 0}
-        <div class="bg-green-50 rounded-xl p-4">
-          <h2 class="text-lg font-semibold text-green-800 mb-3">Likely Safe Foods</h2>
+        <div class="bg-green-900/30 rounded-xl p-4 border border-green-800/50">
+          <h2 class="text-lg font-semibold text-green-400 mb-3">Likely Safe Foods</h2>
           <div class="flex flex-wrap gap-2">
             {#each safeFoods as item}
-              <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm capitalize">
+              <span class="bg-green-900/50 text-green-300 px-3 py-1 rounded-full text-sm capitalize">
                 {item.food}
               </span>
             {/each}
           </div>
-          <p class="text-xs text-green-600 mt-2">
+          <p class="text-xs text-green-500 mt-2">
             Eaten often but rarely appear before symptoms
           </p>
         </div>
@@ -146,8 +146,8 @@
 
       <!-- Top Symptoms -->
       {#if stats.topSymptoms.length > 0}
-        <div class="bg-white rounded-xl p-4 shadow-sm">
-          <h2 class="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
+        <div class="bg-[#1a1a1a] rounded-xl p-4">
+          <h2 class="text-sm font-semibold text-gray-400 uppercase tracking-wide mb-3">
             Most Common Symptoms
           </h2>
           <div class="space-y-2">
@@ -155,7 +155,7 @@
               <div class="flex items-center justify-between">
                 <div class="flex items-center gap-2">
                   <span class="text-xl">{symptom.icon}</span>
-                  <span class="text-gray-700">{symptom.label}</span>
+                  <span class="text-gray-200">{symptom.label}</span>
                 </div>
                 <span class="text-gray-500 text-sm">{symptom.count}x</span>
               </div>
@@ -167,23 +167,23 @@
   </main>
 
   <!-- Bottom Navigation -->
-  <nav class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-4 py-2 safe-area-pb">
+  <nav class="fixed bottom-0 left-0 right-0 bg-[#1a1a1a] border-t border-[#2a2a2a] px-4 py-2 safe-area-pb">
     <div class="max-w-lg mx-auto flex justify-around">
-      <a href="/" class="flex flex-col items-center py-2 px-4 text-gray-400 hover:text-purple-600">
+      <a href="/" class="flex flex-col items-center py-2 px-4 text-gray-400 hover:text-purple-400">
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
             d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
         </svg>
         <span class="text-xs mt-1">Log</span>
       </a>
-      <a href="/history" class="flex flex-col items-center py-2 px-4 text-gray-400 hover:text-purple-600">
+      <a href="/history" class="flex flex-col items-center py-2 px-4 text-gray-400 hover:text-purple-400">
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
             d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
         </svg>
         <span class="text-xs mt-1">History</span>
       </a>
-      <a href="/insights" class="flex flex-col items-center py-2 px-4 text-purple-600">
+      <a href="/insights" class="flex flex-col items-center py-2 px-4 text-purple-400">
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
             d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />

@@ -24,10 +24,10 @@
   }));
 </script>
 
-<div class="flex items-center justify-between bg-white rounded-xl p-3 shadow-sm">
+<div class="flex items-center justify-between bg-[#1a1a1a] rounded-xl p-3 shadow-sm">
   <button
     onclick={() => navigateDay(-1)}
-    class="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+    class="p-2 hover:bg-[#2a2a2a] rounded-lg transition-colors text-gray-300"
     aria-label="Previous day"
   >
     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -40,13 +40,13 @@
       type="date"
       value={$currentDate}
       onchange={handleDateChange}
-      class="text-lg font-semibold text-center bg-transparent cursor-pointer"
+      class="text-lg font-semibold text-center bg-transparent cursor-pointer text-gray-100"
     />
-    <span class="text-sm text-gray-500">{displayDate}</span>
+    <span class="text-sm text-gray-400">{displayDate}</span>
     {#if !isToday}
       <button
         onclick={goToToday}
-        class="text-xs text-indigo-600 hover:text-indigo-800 font-medium"
+        class="text-xs text-purple-400 hover:text-purple-300 font-medium"
       >
         Go to Today
       </button>
@@ -55,7 +55,7 @@
 
   <button
     onclick={() => navigateDay(1)}
-    class="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+    class="p-2 hover:bg-[#2a2a2a] rounded-lg transition-colors text-gray-300"
     aria-label="Next day"
   >
     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">

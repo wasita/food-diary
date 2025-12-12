@@ -4,16 +4,16 @@
 
 {#if $currentEntry && $currentEntry.symptoms.length > 0}
   <div class="space-y-3">
-    <h2 class="text-sm font-semibold text-gray-500 uppercase tracking-wide">
+    <h2 class="text-sm font-semibold text-gray-400 uppercase tracking-wide">
       Today's Symptoms ({$currentEntry.symptoms.length})
     </h2>
 
     <div class="flex flex-wrap gap-2">
       {#each $currentEntry.symptoms as symptom (symptom.id)}
-        <div class="flex items-center gap-2 bg-white rounded-full pl-3 pr-2 py-1 shadow-sm">
+        <div class="flex items-center gap-2 bg-[#1a1a1a] rounded-full pl-3 pr-2 py-1">
           <span class="text-lg">{symptom.icon}</span>
-          <span class="text-sm font-medium text-gray-700">{symptom.label}</span>
-          <span class="text-xs text-gray-400">{symptom.timestamp}</span>
+          <span class="text-sm font-medium text-gray-200">{symptom.label}</span>
+          <span class="text-xs text-gray-500">{symptom.timestamp}</span>
           <button
             onclick={() => removeSymptom(symptom.id)}
             class="p-1 text-gray-400 hover:text-red-500 transition-colors"

@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { onMount } from 'svelte';
   import { foodHistory, addFood, type MealType } from '$lib/stores/entries';
 
   let inputValue = $state('');
@@ -13,6 +14,19 @@
     { value: 'snack', label: 'Snack', icon: '🍿' },
   ];
 
+  // Auto-suggest meal type based on time of day
+  function getSuggestedMeal(): MealType {
+    const hour = new Date().getHours();
+    if (hour >= 5 && hour < 11) return 'breakfast';
+    if (hour >= 11 && hour < 15) return 'lunch';
+    if (hour >= 17 && hour < 21) return 'dinner';
+    return 'snack';
+  }
+
+  onMount(() => {
+    selectedMeal = getSuggestedMeal();
+  });
+
   let suggestions = $derived(inputValue.length > 0
     ? $foodHistory.filter(f =>
         f.toLowerCase().includes(inputValue.toLowerCase())
@@ -24,7 +38,8 @@
 
     await addFood(inputValue.trim(), selectedMeal);
     inputValue = '';
-    selectedMeal = undefined;
+    // Reset to suggested meal for next entry
+    selectedMeal = getSuggestedMeal();
     showSuggestions = false;
   }
 
@@ -56,7 +71,7 @@
 </script>
 
 <div class="space-y-3">
-  <h2 class="text-sm font-semibold text-gray-500 uppercase tracking-wide">
+  <h2 class="text-sm font-semibold text-gray-400 uppercase tracking-wide">
     Log Food
   </h2>
 
@@ -65,12 +80,12 @@
     {#each mealTypes as meal}
       <button
         onclick={() => selectedMeal = selectedMeal === meal.value ? undefined : meal.value}
-        class="flex-1 py-2 px-2 rounded-lg text-xs font-medium transition-all
+        class="flex-1 py-3 px-2 rounded-xl text-xs font-medium transition-all
                {selectedMeal === meal.value
                  ? 'bg-purple-600 text-white shadow-sm'
-                 : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}"
+                 : 'bg-[#1a1a1a] text-gray-300 hover:bg-[#2a2a2a]'}"
       >
-        <span class="block text-base">{meal.icon}</span>
+        <span class="block text-xl mb-1">{meal.icon}</span>
         {meal.label}
       </button>
     {/each}
@@ -87,9 +102,9 @@
         oninput={() => showSuggestions = true}
         type="text"
         placeholder="What did you eat?"
-        class="flex-1 px-4 py-3 rounded-xl border border-gray-200
-               focus:border-purple-400 focus:ring-2 focus:ring-purple-100
-               outline-none transition-all"
+        class="flex-1 px-4 py-3 rounded-xl border border-[#2a2a2a] bg-[#1a1a1a]
+               focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20
+               outline-none transition-all text-gray-100 placeholder-gray-500"
       />
       <button
         onclick={handleSubmit}
@@ -104,13 +119,13 @@
 
     <!-- Autocomplete suggestions -->
     {#if showSuggestions && suggestions.length > 0}
-      <div class="absolute top-full left-0 right-12 mt-1 bg-white rounded-xl
-                  shadow-lg border border-gray-100 overflow-hidden z-10">
+      <div class="absolute top-full left-0 right-12 mt-1 bg-[#1a1a1a] rounded-xl
+                  shadow-lg border border-[#2a2a2a] overflow-hidden z-10">
         {#each suggestions as suggestion}
           <button
             onclick={() => selectSuggestion(suggestion)}
-            class="w-full px-4 py-2 text-left hover:bg-purple-50
-                   transition-colors text-gray-700"
+            class="w-full px-4 py-2 text-left hover:bg-[#2a2a2a]
+                   transition-colors text-gray-200"
           >
             {suggestion}
           </button>
@@ -125,8 +140,8 @@
       {#each $foodHistory.slice(0, 6) as food}
         <button
           onclick={() => addFood(food, selectedMeal)}
-          class="px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded-full
-                 hover:bg-purple-100 hover:text-purple-700 transition-colors"
+          class="px-3 py-2 text-sm bg-[#1a1a1a] text-gray-300 rounded-full
+                 hover:bg-purple-600 hover:text-white transition-colors"
         >
           {food}
         </button>

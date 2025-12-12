@@ -28,7 +28,7 @@
   <meta name="description" content="Track your food and symptoms" />
 </svelte:head>
 
-<div class="min-h-screen bg-gray-50">
+<div class="min-h-screen bg-[#0f0f0f]">
   <!-- Header -->
   <header class="bg-gradient-to-r from-sky-400 via-purple-400 to-pink-400 text-white p-4 shadow-lg">
     <div class="max-w-lg mx-auto flex items-center justify-between">
@@ -46,7 +46,7 @@
   <main class="max-w-lg mx-auto p-4 pb-24 space-y-6">
     {#if $isLoading}
       <div class="flex items-center justify-center py-12">
-        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
+        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-500"></div>
       </div>
     {:else}
       <DayPicker />
@@ -77,7 +77,7 @@
 />
 
 <!-- Bottom Navigation -->
-<nav class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-4 py-2 safe-area-pb">
+<nav class="fixed bottom-0 left-0 right-0 bg-[#1a1a1a] border-t border-[#2a2a2a] px-4 py-2 safe-area-pb">
   <div class="max-w-lg mx-auto flex justify-around">
     <a href="/" class="flex flex-col items-center py-2 px-4 text-purple-600">
       <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">

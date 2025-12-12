@@ -42,13 +42,13 @@
 
 {#if $currentEntry && $currentEntry.foods.length > 0}
   <div class="space-y-3">
-    <h2 class="text-sm font-semibold text-gray-500 uppercase tracking-wide">
+    <h2 class="text-sm font-semibold text-gray-400 uppercase tracking-wide">
       Today's Food ({$currentEntry.foods.length})
     </h2>
 
     <div class="space-y-2">
       {#each $currentEntry.foods as food (food.id)}
-        <div class="flex items-center justify-between bg-white rounded-xl p-3 shadow-sm">
+        <div class="flex items-center justify-between bg-[#1a1a1a] rounded-xl p-3">
           <div class="flex items-center gap-3 flex-1 min-w-0">
             <span class="text-xl">{food.mealType ? mealIcons[food.mealType] : '🍽️'}</span>
             <div class="flex-1 min-w-0">
@@ -57,7 +57,7 @@
                   type="text"
                   bind:value={editValue}
                   onkeydown={(e) => handleKeydown(e, food.id)}
-                  class="w-full px-2 py-1 border border-purple-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-200 mb-2"
+                  class="w-full px-2 py-1 border border-[#3a3a3a] bg-[#0f0f0f] rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500/30 mb-2 text-gray-100"
                   autofocus
                 />
                 <div class="flex gap-1 mb-2">
@@ -65,7 +65,7 @@
                     <button
                       onclick={() => editMeal = editMeal === meal ? undefined : meal}
                       class="px-2 py-1 text-xs rounded transition-colors
-                             {editMeal === meal ? 'bg-purple-600 text-white' : 'bg-gray-100 text-gray-600'}"
+                             {editMeal === meal ? 'bg-purple-600 text-white' : 'bg-[#2a2a2a] text-gray-300'}"
                     >
                       {mealIcons[meal]}
                     </button>
@@ -80,20 +80,20 @@
               {:else}
                 <button
                   onclick={() => startEdit(food.id, food.name, food.mealType)}
-                  class="font-medium text-gray-800 hover:text-purple-600 text-left truncate block max-w-full"
+                  class="font-medium text-gray-100 hover:text-purple-400 text-left truncate block max-w-full"
                   title="Click to edit"
                 >
                   {food.name}
                 </button>
                 <div class="flex items-center gap-2">
                   {#if food.mealType}
-                    <span class="text-xs text-purple-600 capitalize">{food.mealType}</span>
-                    <span class="text-xs text-gray-300">·</span>
+                    <span class="text-xs text-purple-400 capitalize">{food.mealType}</span>
+                    <span class="text-xs text-gray-600">·</span>
                   {/if}
-                  <span class="text-xs text-gray-400">{food.timestamp}</span>
+                  <span class="text-xs text-gray-500">{food.timestamp}</span>
                 </div>
                 {#if food.notes}
-                  <p class="text-sm text-gray-500 truncate">{food.notes}</p>
+                  <p class="text-sm text-gray-400 truncate">{food.notes}</p>
                 {/if}
               {/if}
             </div>

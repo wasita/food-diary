@@ -1,9 +1,17 @@
 <script lang="ts">
-  import { foodHistory, addFood } from '$lib/stores/entries';
+  import { foodHistory, addFood, type MealType } from '$lib/stores/entries';
 
   let inputValue = $state('');
+  let selectedMeal = $state<MealType | undefined>(undefined);
   let showSuggestions = $state(false);
   let inputRef: HTMLInputElement;
+
+  const mealTypes: { value: MealType; label: string; icon: string }[] = [
+    { value: 'breakfast', label: 'Breakfast', icon: '🌅' },
+    { value: 'lunch', label: 'Lunch', icon: '☀️' },
+    { value: 'dinner', label: 'Dinner', icon: '🌙' },
+    { value: 'snack', label: 'Snack', icon: '🍿' },
+  ];
 
   let suggestions = $derived(inputValue.length > 0
     ? $foodHistory.filter(f =>
@@ -14,8 +22,9 @@
   async function handleSubmit() {
     if (!inputValue.trim()) return;
 
-    await addFood(inputValue.trim());
+    await addFood(inputValue.trim(), selectedMeal);
     inputValue = '';
+    selectedMeal = undefined;
     showSuggestions = false;
   }
 
@@ -51,6 +60,22 @@
     Log Food
   </h2>
 
+  <!-- Meal type selector -->
+  <div class="flex gap-2">
+    {#each mealTypes as meal}
+      <button
+        onclick={() => selectedMeal = selectedMeal === meal.value ? undefined : meal.value}
+        class="flex-1 py-2 px-2 rounded-lg text-xs font-medium transition-all
+               {selectedMeal === meal.value
+                 ? 'bg-purple-600 text-white shadow-sm'
+                 : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}"
+      >
+        <span class="block text-base">{meal.icon}</span>
+        {meal.label}
+      </button>
+    {/each}
+  </div>
+
   <div class="relative">
     <div class="flex gap-2">
       <input
@@ -63,14 +88,14 @@
         type="text"
         placeholder="What did you eat?"
         class="flex-1 px-4 py-3 rounded-xl border border-gray-200
-               focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100
+               focus:border-purple-400 focus:ring-2 focus:ring-purple-100
                outline-none transition-all"
       />
       <button
         onclick={handleSubmit}
         disabled={!inputValue.trim()}
-        class="px-4 py-3 bg-indigo-600 text-white rounded-xl font-medium
-               hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed
+        class="px-4 py-3 bg-purple-600 text-white rounded-xl font-medium
+               hover:bg-purple-700 disabled:opacity-50 disabled:cursor-not-allowed
                transition-colors"
       >
         Add
@@ -84,7 +109,7 @@
         {#each suggestions as suggestion}
           <button
             onclick={() => selectSuggestion(suggestion)}
-            class="w-full px-4 py-2 text-left hover:bg-indigo-50
+            class="w-full px-4 py-2 text-left hover:bg-purple-50
                    transition-colors text-gray-700"
           >
             {suggestion}
@@ -99,13 +124,17 @@
     <div class="flex flex-wrap gap-2">
       {#each $foodHistory.slice(0, 6) as food}
         <button
-          onclick={() => addFood(food)}
+          onclick={() => addFood(food, selectedMeal)}
           class="px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded-full
-                 hover:bg-indigo-100 hover:text-indigo-700 transition-colors"
+                 hover:bg-purple-100 hover:text-purple-700 transition-colors"
         >
           {food}
         </button>
       {/each}
     </div>
   {/if}
+
+  <p class="text-xs text-gray-400">
+    Timestamp records when you log, not when you ate
+  </p>
 </div>

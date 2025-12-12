@@ -13,10 +13,13 @@ export interface SymptomEntry {
   timestamp: string;
 }
 
+export type MealType = 'breakfast' | 'lunch' | 'dinner' | 'snack';
+
 export interface FoodEntry {
   id: string;
   name: string;
   timestamp: string;
+  mealType?: MealType;
   notes?: string;
 }
 
@@ -135,7 +138,7 @@ export async function removeSymptom(symptomEntryId: string) {
 }
 
 // Add a food item to current entry
-export async function addFood(name: string, notes?: string) {
+export async function addFood(name: string, mealType?: MealType, notes?: string) {
   const entry = get(currentEntry);
   if (!entry) return;
 
@@ -144,6 +147,7 @@ export async function addFood(name: string, notes?: string) {
     name,
     timestamp: getCurrentTime(),
   };
+  if (mealType) newFood.mealType = mealType;
   if (notes) newFood.notes = notes;
 
   const updatedEntry = {
@@ -159,7 +163,7 @@ export async function addFood(name: string, notes?: string) {
 }
 
 // Update a food item
-export async function updateFood(foodId: string, name: string, notes?: string) {
+export async function updateFood(foodId: string, name: string, mealType?: MealType, notes?: string) {
   const entry = get(currentEntry);
   if (!entry) return;
 
@@ -168,6 +172,8 @@ export async function updateFood(foodId: string, name: string, notes?: string) {
     foods: entry.foods.map(f => {
       if (f.id === foodId) {
         const updated: FoodEntry = { ...f, name };
+        if (mealType) updated.mealType = mealType;
+        else delete updated.mealType;
         if (notes) updated.notes = notes;
         else delete updated.notes;
         return updated;

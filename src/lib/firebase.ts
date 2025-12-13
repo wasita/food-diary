@@ -1,6 +1,6 @@
 import { initializeApp, type FirebaseApp } from 'firebase/app';
 import { initializeFirestore, persistentLocalCache, persistentMultipleTabManager, type Firestore } from 'firebase/firestore';
-import { getAuth, signInAnonymously, onAuthStateChanged, type Auth } from 'firebase/auth';
+import { getAuth, signInWithRedirect, getRedirectResult, signOut as firebaseSignOut, onAuthStateChanged, GoogleAuthProvider, type Auth, type User } from 'firebase/auth';
 import { browser } from '$app/environment';
 import {
   PUBLIC_FIREBASE_API_KEY,
@@ -50,26 +50,51 @@ export function getFirebaseAuth(): Auth {
   return auth;
 }
 
-// Get or create anonymous user
-export async function getAnonymousUser(): Promise<string | null> {
+// Google Auth Provider
+const googleProvider = new GoogleAuthProvider();
+
+// Sign in with Google (using redirect for better compatibility)
+export async function signInWithGoogle(): Promise<void> {
+  if (!browser) return;
+
+  try {
+    const firebaseAuth = getFirebaseAuth();
+    await signInWithRedirect(firebaseAuth, googleProvider);
+  } catch (error) {
+    console.error('Google sign-in failed:', error);
+  }
+}
+
+// Handle redirect result (call on app init)
+export async function handleAuthRedirect(): Promise<User | null> {
   if (!browser) return null;
 
-  const firebaseAuth = getFirebaseAuth();
+  try {
+    const firebaseAuth = getFirebaseAuth();
+    const result = await getRedirectResult(firebaseAuth);
+    return result?.user ?? null;
+  } catch (error) {
+    console.error('Auth redirect error:', error);
+    return null;
+  }
+}
 
-  return new Promise((resolve) => {
-    const unsubscribe = onAuthStateChanged(firebaseAuth, async (user) => {
-      unsubscribe();
-      if (user) {
-        resolve(user.uid);
-      } else {
-        try {
-          const result = await signInAnonymously(firebaseAuth);
-          resolve(result.user.uid);
-        } catch (error) {
-          console.error('Anonymous auth failed:', error);
-          resolve(null);
-        }
-      }
-    });
-  });
+// Sign out
+export async function signOut(): Promise<void> {
+  if (!browser) return;
+
+  try {
+    const firebaseAuth = getFirebaseAuth();
+    await firebaseSignOut(firebaseAuth);
+  } catch (error) {
+    console.error('Sign out failed:', error);
+  }
+}
+
+// Listen to auth state changes
+export function onAuthChange(callback: (user: User | null) => void): () => void {
+  if (!browser) return () => {};
+
+  const firebaseAuth = getFirebaseAuth();
+  return onAuthStateChanged(firebaseAuth, callback);
 }

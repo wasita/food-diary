@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount, onDestroy } from 'svelte';
-  import { initUser, isLoading } from '$lib/stores/user';
+  import { user, logout, isAuthenticated, isLoading } from '$lib/stores/user';
   import { loadEntry, formatDate, currentEntry } from '$lib/stores/entries';
   import { loadCustomSymptoms } from '$lib/stores/symptoms';
   import { loadFoodHistory } from '$lib/stores/entries';
@@ -15,25 +15,40 @@
 
   let showAddSymptomModal = $state(false);
   let showReminderSettings = $state(false);
+  let showUserMenu = $state(false);
 
   onMount(async () => {
-    await initUser();
-    await Promise.all([
-      loadEntry(formatDate(new Date())),
-      loadCustomSymptoms(),
-      loadFoodHistory(),
-    ]);
+    if ($isAuthenticated) {
+      await Promise.all([
+        loadEntry(formatDate(new Date())),
+        loadCustomSymptoms(),
+        loadFoodHistory(),
+      ]);
 
-    // Start reminder checker if enabled
-    if ($reminderSettings.enabled) {
-      startReminderChecker();
+      // Start reminder checker if enabled
+      if ($reminderSettings.enabled) {
+        startReminderChecker();
+      }
     }
   });
 
   onDestroy(() => {
     stopReminderChecker();
   });
+
+  async function handleLogout() {
+    await logout();
+    showUserMenu = false;
+  }
+
+  function handleClickOutside(event: MouseEvent) {
+    if (showUserMenu) {
+      showUserMenu = false;
+    }
+  }
 </script>
+
+<svelte:window onclick={handleClickOutside} />
 
 <svelte:head>
   <title>Food Diary</title>
@@ -56,12 +71,44 @@
               d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
           </svg>
         </button>
-        <a href="/history" class="p-1 text-white/70 hover:text-white transition-colors" aria-label="View history">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-          </svg>
-        </a>
+
+        <!-- User menu -->
+        <div class="relative">
+          <button
+            onclick={() => showUserMenu = !showUserMenu}
+            class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center overflow-hidden hover:bg-white/30 transition-colors"
+            aria-label="User menu"
+          >
+            {#if $user?.photoURL}
+              <img src={$user.photoURL} alt="" class="w-full h-full object-cover" />
+            {:else}
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+              </svg>
+            {/if}
+          </button>
+
+          {#if showUserMenu}
+            <!-- svelte-ignore a11y_no_static_element_interactions -->
+            <!-- svelte-ignore a11y_click_events_have_key_events -->
+            <div
+              class="absolute right-0 top-10 bg-[#1a1a1a] rounded-xl shadow-lg border border-[#2a2a2a] py-2 min-w-[180px] z-50"
+              onclick={(e) => e.stopPropagation()}
+            >
+              <div class="px-4 py-2 border-b border-[#2a2a2a]">
+                <p class="text-sm font-medium text-gray-100 truncate">{$user?.displayName || 'User'}</p>
+                <p class="text-xs text-gray-500 truncate">{$user?.email}</p>
+              </div>
+              <button
+                onclick={handleLogout}
+                class="w-full px-4 py-2 text-left text-sm text-gray-300 hover:bg-[#2a2a2a] transition-colors"
+              >
+                Sign out
+              </button>
+            </div>
+          {/if}
+        </div>
       </div>
     </div>
   </header>

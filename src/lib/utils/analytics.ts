@@ -1,4 +1,5 @@
 import type { DayEntry, SymptomEntry, FoodEntry } from '$lib/stores/entries';
+import { parseDate } from '$lib/stores/entries';
 
 export interface FoodCorrelation {
   food: string;
@@ -40,9 +41,10 @@ function parseTimeToHours(timeStr: string): number {
 
 /**
  * Convert a date string and time to a timestamp for comparison
+ * Uses local timezone via parseDate
  */
 function toTimestamp(dateStr: string, timeStr: string): number {
-  const date = new Date(dateStr + 'T00:00:00');
+  const date = parseDate(dateStr);
   const hours = parseTimeToHours(timeStr);
   return date.getTime() + hours * 60 * 60 * 1000;
 }

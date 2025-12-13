@@ -68,7 +68,7 @@
               onclick={() => selectedEmoji = emoji}
               class="w-10 h-10 text-xl rounded-lg transition-all
                      {selectedEmoji === emoji
-                       ? 'bg-purple-600 ring-2 ring-purple-400'
+                       ? 'bg-violet-500 ring-2 ring-violet-400'
                        : 'bg-[#2a2a2a] hover:bg-[#3a3a3a]'}"
             >
               {emoji}
@@ -88,7 +88,7 @@
           type="text"
           placeholder="e.g., Acid Reflux"
           class="w-full px-4 py-3 rounded-xl border border-[#3a3a3a] bg-[#0f0f0f]
-                 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20
+                 focus:border-violet-400 focus:ring-2 focus:ring-violet-400/20
                  outline-none transition-all text-gray-100 placeholder-gray-500"
         />
       </div>
@@ -113,8 +113,8 @@
         <button
           onclick={handleSubmit}
           disabled={!label.trim() || isSubmitting}
-          class="flex-1 px-4 py-3 bg-purple-600 text-white rounded-xl font-medium
-                 hover:bg-purple-700 disabled:opacity-50 disabled:cursor-not-allowed
+          class="flex-1 px-4 py-3 bg-violet-500 text-white rounded-xl font-medium
+                 hover:bg-violet-600 disabled:opacity-50 disabled:cursor-not-allowed
                  transition-colors"
         >
           Add Symptom

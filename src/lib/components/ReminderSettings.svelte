@@ -104,7 +104,7 @@
           disabled={permissionStatus === 'unsupported' || permissionStatus === 'denied'}
           aria-label={$reminderSettings.enabled ? 'Disable reminders' : 'Enable reminders'}
           class="relative w-12 h-6 rounded-full transition-colors disabled:opacity-50
-                 {$reminderSettings.enabled ? 'bg-purple-600' : 'bg-[#3a3a3a]'}"
+                 {$reminderSettings.enabled ? 'bg-violet-500' : 'bg-[#3a3a3a]'}"
         >
           <span
             class="absolute top-1 w-4 h-4 bg-white rounded-full transition-transform
@@ -141,12 +141,12 @@
               type="time"
               bind:value={newTime}
               class="flex-1 px-3 py-2 bg-[#0f0f0f] border border-[#3a3a3a] rounded-lg
-                     text-gray-100 focus:outline-none focus:ring-2 focus:ring-purple-500/30"
+                     text-gray-100 focus:outline-none focus:ring-2 focus:ring-violet-400/30"
             />
             <button
               onclick={handleAddTime}
-              class="px-4 py-2 bg-purple-600 text-white rounded-lg font-medium
-                     hover:bg-purple-700 transition-colors"
+              class="px-4 py-2 bg-violet-500 text-white rounded-lg font-medium
+                     hover:bg-violet-600 transition-colors"
             >
               Add
             </button>

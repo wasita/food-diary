@@ -46,7 +46,7 @@
     {#if !isToday}
       <button
         onclick={goToToday}
-        class="text-xs text-purple-400 hover:text-purple-300 font-medium"
+        class="text-xs text-violet-400 hover:text-violet-300 font-medium"
       >
         Go to Today
       </button>

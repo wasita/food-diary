@@ -25,7 +25,7 @@
     <button
       onclick={onAddCustom}
       class="flex flex-col items-center justify-center p-4 bg-[#1a1a1a] rounded-xl
-             border-2 border-dashed border-[#3a3a3a] hover:border-purple-500
+             border-2 border-dashed border-[#3a3a3a] hover:border-violet-400
              hover:bg-[#2a2a2a] transition-colors min-h-[80px]"
     >
       <span class="text-3xl text-gray-500">+</span>

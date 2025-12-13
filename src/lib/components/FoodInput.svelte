@@ -85,7 +85,7 @@
           (selectedMeal = selectedMeal === meal.value ? undefined : meal.value)}
         class="flex-1 py-3 px-2 rounded-xl text-xs font-medium transition-all
                {selectedMeal === meal.value
-          ? 'bg-purple-600 text-white shadow-sm'
+          ? 'bg-violet-500 text-white shadow-sm'
           : 'bg-[#1a1a1a] text-gray-300 hover:bg-[#2a2a2a]'}"
       >
         <span class="block text-xl mb-1">{meal.icon}</span>
@@ -106,14 +106,14 @@
         type="text"
         placeholder="What did you eat?"
         class="flex-1 px-4 py-3 rounded-xl border border-[#2a2a2a] bg-[#1a1a1a]
-               focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20
+               focus:border-violet-400 focus:ring-2 focus:ring-violet-400/20
                outline-none transition-all text-gray-100 placeholder-gray-500"
       />
       <button
         onclick={handleSubmit}
         disabled={!inputValue.trim()}
-        class="px-4 py-3 bg-purple-600 text-white rounded-xl font-medium
-               hover:bg-purple-700 disabled:opacity-50 disabled:cursor-not-allowed
+        class="px-4 py-3 bg-violet-500 text-white rounded-xl font-medium
+               hover:bg-violet-600 disabled:opacity-50 disabled:cursor-not-allowed
                transition-colors"
       >
         Add
@@ -146,7 +146,7 @@
         <button
           onclick={() => addFood(food, selectedMeal)}
           class="px-3 py-2 text-sm bg-[#1a1a1a] text-gray-300 rounded-full
-                 hover:bg-purple-600 hover:text-white transition-colors"
+                 hover:bg-violet-500 hover:text-white transition-colors"
         >
           {food}
         </button>

@@ -57,7 +57,7 @@
                   type="text"
                   bind:value={editValue}
                   onkeydown={(e) => handleKeydown(e, food.id)}
-                  class="w-full px-2 py-1 border border-[#3a3a3a] bg-[#0f0f0f] rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500/30 mb-2 text-gray-100"
+                  class="w-full px-2 py-1 border border-[#3a3a3a] bg-[#0f0f0f] rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-400/30 mb-2 text-gray-100"
                   autofocus
                 />
                 <div class="flex gap-1 mb-2">
@@ -65,7 +65,7 @@
                     <button
                       onclick={() => editMeal = editMeal === meal ? undefined : meal}
                       class="px-2 py-1 text-xs rounded transition-colors
-                             {editMeal === meal ? 'bg-purple-600 text-white' : 'bg-[#2a2a2a] text-gray-300'}"
+                             {editMeal === meal ? 'bg-violet-500 text-white' : 'bg-[#2a2a2a] text-gray-300'}"
                     >
                       {mealIcons[meal]}
                     </button>
@@ -73,21 +73,21 @@
                 </div>
                 <button
                   onclick={() => saveEdit(food.id)}
-                  class="text-xs text-purple-600 font-medium"
+                  class="text-xs text-violet-500 font-medium"
                 >
                   Save
                 </button>
               {:else}
                 <button
                   onclick={() => startEdit(food.id, food.name, food.mealType)}
-                  class="font-medium text-gray-100 hover:text-purple-400 text-left truncate block max-w-full"
+                  class="font-medium text-gray-100 hover:text-violet-400 text-left truncate block max-w-full"
                   title="Click to edit"
                 >
                   {food.name}
                 </button>
                 <div class="flex items-center gap-2">
                   {#if food.mealType}
-                    <span class="text-xs text-purple-400 capitalize">{food.mealType}</span>
+                    <span class="text-xs text-violet-400 capitalize">{food.mealType}</span>
                     <span class="text-xs text-gray-600">·</span>
                   {/if}
                   <span class="text-xs text-gray-500">{food.timestamp}</span>

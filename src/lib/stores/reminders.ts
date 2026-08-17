@@ -71,8 +71,9 @@ export function sendNotification(title: string, body: string) {
     icon: '/favicon.png',
     badge: '/favicon.png',
     tag: 'food-diary-reminder',
+    // renotify is valid but missing from TS's NotificationOptions lib type
     renotify: true,
-  });
+  } as NotificationOptions);
 }
 
 let reminderInterval: ReturnType<typeof setInterval> | null = null;

@@ -1,6 +1,6 @@
 import { initializeApp, type FirebaseApp } from 'firebase/app';
 import { initializeFirestore, persistentLocalCache, persistentMultipleTabManager, type Firestore } from 'firebase/firestore';
-import { getAuth, signInWithRedirect, getRedirectResult, signOut as firebaseSignOut, onAuthStateChanged, GoogleAuthProvider, type Auth, type User } from 'firebase/auth';
+import { getAuth, signInWithPopup, signOut as firebaseSignOut, onAuthStateChanged, GoogleAuthProvider, type Auth, type User } from 'firebase/auth';
 import { browser } from '$app/environment';
 import {
   PUBLIC_FIREBASE_API_KEY,
@@ -53,28 +53,17 @@ export function getFirebaseAuth(): Auth {
 // Google Auth Provider
 const googleProvider = new GoogleAuthProvider();
 
-// Sign in with Google (using redirect for better compatibility)
-export async function signInWithGoogle(): Promise<void> {
-  if (!browser) return;
-
-  try {
-    const firebaseAuth = getFirebaseAuth();
-    await signInWithRedirect(firebaseAuth, googleProvider);
-  } catch (error) {
-    console.error('Google sign-in failed:', error);
-  }
-}
-
-// Handle redirect result (call on app init)
-export async function handleAuthRedirect(): Promise<User | null> {
+// Sign in with Google (popup — redirect flow is unreliable in browsers that
+// partition third-party storage when authDomain differs from the app domain)
+export async function signInWithGoogle(): Promise<User | null> {
   if (!browser) return null;
 
   try {
     const firebaseAuth = getFirebaseAuth();
-    const result = await getRedirectResult(firebaseAuth);
-    return result?.user ?? null;
+    const result = await signInWithPopup(firebaseAuth, googleProvider);
+    return result.user;
   } catch (error) {
-    console.error('Auth redirect error:', error);
+    console.error('Google sign-in failed:', error);
     return null;
   }
 }
